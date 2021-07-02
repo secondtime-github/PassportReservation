@@ -11,6 +11,24 @@ const notifyLINE = (msg) => {
         });
 }
 
+const ifttt = (msg) => {
+    var unirest = require('unirest');
+unirest('GET', 'https://maker.ifttt.com/trigger/pass/with/key/cbkRww46F2vS38EvGluMZ3')
+  .headers({
+    'Content-Type': 'application/json'
+  })
+  .send(JSON.stringify({
+    "value1": "ok",
+    "value2": msg,
+    "value3": ""
+  }))
+  .end(function (res) { 
+    if (res.error) throw new Error(res.error); 
+    console.log(res.raw_body);
+  });
+
+}
+
 
 function show(res) {
     console.log(res.raw_body);
@@ -19,10 +37,12 @@ function show(res) {
     console.log(status);
     if(status != -1) {
         console.log("send msg to LINE");
-        notifyLINE("Get Ready ? Go !");
+        //notifyLINE("Get Ready ? Go !");
+        ifttt("Get Ready ? Go !");
     } else {
         console.log("NOT send msg to LINE");
-        notifyLINE("Sorry ! Not Ready Yet");
+        //notifyLINE("Sorry ! Not Ready Yet");
+        ifttt("Sorry ! Not Ready Yet");
     }
 }
 
@@ -53,7 +73,7 @@ function getRandomIntInclusive(min, max) {
 async function sendRequest() {
 
     while(true) {
-        var interval = getRandomIntInclusive(2000, 4000) * 2000;
+        var interval = getRandomIntInclusive(2000, 4000) * 700;
         console.log('Taking a break...' + interval);
         await sleep(interval);
         getInfo(show);
@@ -64,7 +84,3 @@ async function sendRequest() {
   
 sendRequest();
   
-  
-
-  
-
